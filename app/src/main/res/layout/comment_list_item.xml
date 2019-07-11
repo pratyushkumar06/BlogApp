@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardview"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="#919191"
+        card_view:cardCornerRadius="15dp">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/uimage"
+                android:layout_width="46dp"
+                android:layout_height="46dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="13dp"
+                app:srcCompat="@drawable/profile" />
+
+            <TextView
+                android:id="@+id/uname"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/uimage"
+                android:layout_alignParentStart="true"
+                android:layout_marginStart="72dp"
+                android:text="Username"
+                android:textColor="#000000"
+                android:textSize="15dp" />
+
+            <TextView
+                android:id="@+id/com"
+                android:layout_width="288dp"
+                android:layout_height="72dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="74dp"
+                android:layout_marginTop="38dp"
+                android:textColor="#000000"
+                android:text="TextView" />
+
+            <TextView
+                android:id="@+id/dt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="152dp"
+                android:layout_marginTop="13dp"
+                android:textColor="#000000" />
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

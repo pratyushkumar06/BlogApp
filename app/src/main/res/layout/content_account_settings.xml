@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".AccountSettings"
+    tools:showIn="@layout/activity_account_settings">
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="46dp"
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/profile" />
+
+    <EditText
+        android:id="@+id/editText3"
+        android:layout_width="280dp"
+        android:layout_height="60dp"
+        android:layout_alignTop="@+id/imageView"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="282dp"
+        android:background="@drawable/bg"
+        android:ems="10"
+        android:hint="   Name"
+        android:inputType="textPersonName"
+        android:textAlignment="viewStart"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@null" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="335dp"
+        android:layout_height="55dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="438dp"
+        android:background="@drawable/btn_background"
+        android:text="Save Changes"
+        android:textColor="#FFFFFF"
+        android:textSize="24dp" />
+</RelativeLayout>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".Comments"
+    tools:showIn="@layout/activity_comments">
+
+    <EditText
+        android:id="@+id/comtext"
+        android:layout_width="316dp"
+        android:layout_height="83dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="22dp"
+        android:ems="10"
+        android:gravity="start|top"
+        android:hint="Your comment here......"
+        android:inputType="textMultiLine" />
+
+    <ImageView
+        android:id="@+id/combtn"
+        android:layout_width="75dp"
+        android:layout_height="69dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="2dp"
+        android:layout_marginBottom="35dp"
+        app:srcCompat="@android:drawable/ic_menu_send" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comview"
+        android:layout_width="match_parent"
+        android:layout_height="564dp"
+        android:layout_above="@+id/comtext"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="1dp"
+        android:layout_marginBottom="5dp" />
+
+</RelativeLayout>
