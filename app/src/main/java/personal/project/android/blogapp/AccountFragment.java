@@ -125,7 +125,6 @@ public class AccountFragment extends Fragment {
                                    accountRecyclerAdapter.notifyDataSetChanged();
                                 }
 
-                               //TODO When data removed the changes should take place in RealTime
                             }
 
                             LoadedforfirstTime = false;
