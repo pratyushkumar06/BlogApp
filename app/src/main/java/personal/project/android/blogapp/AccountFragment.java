@@ -54,7 +54,7 @@ public class AccountFragment extends Fragment {
     private List<BlogPost> list;
     String curid;
     private  String blogId;
-    Boolean LoadedforfirstTime=false;
+    Boolean LoadedforfirstTime=true;
 
     public AccountFragment() {
         // Required empty public constructor
@@ -100,7 +100,7 @@ public class AccountFragment extends Fragment {
                 }
             });
 
-            Query query = firebaseFirestore.collectionGroup("Posts").whereEqualTo("user_id", curid).orderBy("timeStamp",Query.Direction.ASCENDING);
+            Query query = firebaseFirestore.collectionGroup("Posts").whereEqualTo("user_id", curid).orderBy("timeStamp",Query.Direction.DESCENDING);
             if(auth.getCurrentUser()!=null) {
                 query.addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
