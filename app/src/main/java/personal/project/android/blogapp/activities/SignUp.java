@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -20,6 +20,8 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Objects;
+
+import personal.project.android.blogapp.R;
 
 public class SignUp extends AppCompatActivity {
 
@@ -53,7 +55,7 @@ public class SignUp extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Intent intent=new Intent(SignUp.this,MainActivity.class);
+                Intent intent=new Intent(SignUp.this, MainActivity.class);
                 startActivity(intent);
                 finish();
 

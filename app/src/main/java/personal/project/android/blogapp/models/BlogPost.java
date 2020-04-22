@@ -1,9 +1,8 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.models;
 
-import java.sql.Timestamp;
 import java.util.Date;
 
-public class BlogPost extends BlogPostId{
+public class BlogPost extends BlogPostId {
    public String user_id,url,title,description,uid;  //Names should be same as provided in put method in addData method
     public Date timeStamp;
 

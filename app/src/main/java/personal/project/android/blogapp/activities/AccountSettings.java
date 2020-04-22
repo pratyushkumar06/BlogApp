@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -24,7 +24,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -38,7 +37,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -49,6 +47,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+
+import personal.project.android.blogapp.R;
 
 public class AccountSettings extends AppCompatActivity {
     private Button button;
@@ -166,7 +166,7 @@ public class AccountSettings extends AppCompatActivity {
 
         if(mAuth.getCurrentUser()==null){
             finish();
-            Intent intent=new Intent(AccountSettings.this,MainActivity.class);
+            Intent intent=new Intent(AccountSettings.this, MainActivity.class);
             startActivity(intent);
 
         }

@@ -1,8 +1,10 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.models;
 
 import java.util.Date;
 
-public class CommentsContent extends BlogPostId{
+import personal.project.android.blogapp.models.BlogPostId;
+
+public class CommentsContent extends BlogPostId {
     private String message,uid;
     private Date timestamp;
 

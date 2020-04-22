@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 
 import android.os.Bundle;
@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import personal.project.android.blogapp.R;
 
 
 /**

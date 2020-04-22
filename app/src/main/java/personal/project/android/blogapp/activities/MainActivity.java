@@ -1,23 +1,21 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.Manifest;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+
+import personal.project.android.blogapp.R;
 
 public class MainActivity extends AppCompatActivity {
     private Button button,signup;
@@ -49,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in=new Intent(MainActivity.this,SignUp.class);
+                Intent in=new Intent(MainActivity.this, SignUp.class);
                 startActivity(in);
                 finish();
             }
@@ -60,7 +58,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged( FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null){
 
-                    Intent intent=new Intent(MainActivity.this,PostActivity.class);
+                    Intent intent=new Intent(MainActivity.this, PostActivity.class);
                     startActivity(intent);
                     finish();
                 }

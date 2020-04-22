@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -8,12 +8,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageSwitcher;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -35,14 +32,18 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 import javax.annotation.Nullable;
+
+import personal.project.android.blogapp.models.BlogPost;
+import personal.project.android.blogapp.activities.Comments;
+import personal.project.android.blogapp.R;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder> {
 
@@ -80,7 +81,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
 
-        holder.setIsRecyclable(false);  //Smooth Loading without Recycling
+        //holder.setIsRecyclable(false);  //Smooth Loading without Recycling
 
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
@@ -126,58 +127,22 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                 @Override
                 public void onClick(View v) {
 
-                   firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                            if (task.getResult().isEmpty()) {
-                                    Map<String, Object> likesMap = new HashMap<>();
-                                    likesMap.put("uid", curruid);
-                                    //likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                    System.out.println(BlogPostid);
-                                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
-
-
-                            }else if (task.getResult() != null) {
-                                Query query=firebaseFirestore.collectionGroup("Likes").whereEqualTo("uid", curruid);
-                                query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-                                    @Override
-                                    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                                        if(queryDocumentSnapshots!=null){
-                                            for(DocumentChange documentChange:queryDocumentSnapshots.getDocumentChanges()){
-                                                String id=documentChange.getDocument().getId();
-                                                System.out.println("vvvvvv"+id);
-                                                if(!id.equals(curruid)){
-                                                    System.out.println("GGGGGG"+id);
-                                                    Map<String, Object> likesMap = new HashMap<>();
-                                                    likesMap.put("uid", curruid);
-                                                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
-                                                }
-
-                                                if(id.equals(curruid)){
-                                                    System.out.println("FFFFFFF"+id);
-                                                    DocumentReference docRef = firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid);
-                                                    Map<String,Object> updates = new HashMap<>();
-                                                    updates.put("uid", FieldValue.delete());
-                                                    docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                                        @Override
-                                                        public void onComplete(@NonNull Task<Void> task) {
-                                                            System.out.println("Deleted");
-                                                        }
-                                                    });
-
-                                                }
-                                            }
-                                        }
-                                    }
-                                });
-                                firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).delete();
-
-                            }
-                        }
-
-                    });
-
+                   DocumentReference mref=firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid);
+                   mref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                       @Override
+                       public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                           if(task.isSuccessful()){
+                               DocumentSnapshot document = task.getResult();
+                               if (document.exists()) {
+                                   firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).delete();
+                               } else {
+                                   Map<String, Object> likesMap = new HashMap<>();
+                                   likesMap.put("uid", curruid);
+                                   firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
+                               }
+                           }
+                       }
+                   });
                 }
             });
 
@@ -231,7 +196,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         holder.cbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in=new Intent(context,Comments.class);
+                Intent in=new Intent(context, Comments.class);
                 in.putExtra("blogPostId",BlogPostid);  //We pass the BlogPost Id too
                 context.startActivity(in);
             }
@@ -244,13 +209,11 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         holder.setPostimage(url);
 
 
-        System.out.println(uid);
-
         long milisecs=blogPosts.get(position).getTimeStamp().getTime();
         String datestr= DateFormat.format("dd/MM/yyyy",new Date(milisecs)).toString();
         holder.setTime(datestr);
 
-        //Likes Feature
+       //Likes Feature
 
     }
 
@@ -259,42 +222,6 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         return blogPosts.size();
     }
 
-    public void method(final String BlogPostid){
-
-        final String curruid=auth.getCurrentUser().getUid();
-        //final String BlogPostid=blogPosts.get(position).BlogPostid;
-        Query query = firebaseFirestore.collectionGroup("Likes").whereEqualTo("uid", curruid);
-        query.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
-                if(queryDocumentSnapshots!=null) {
-                    for (DocumentSnapshot document : queryDocumentSnapshots.getDocuments()) {
-                        System.out.println("YOO"+document.getId());
-                        if(document.getId()==curruid){
-                            //System.out.println("WAOOOO");
-                            DocumentReference docRef = firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid);
-                            Map<String,Object> updates = new HashMap<>();
-                            updates.put("uid", FieldValue.delete());
-                            docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    System.out.println("Deleted");
-                                }
-                            });
-
-                            //firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).delete();
-                        }
-                        else if (document.getId()!=curruid) {
-                            Map<String, Object> likesMap = new HashMap<>();
-                            likesMap.put("uid", curruid);
-                            System.out.println(BlogPostid);
-                            firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
-                        }
-                    }
-                }
-            }
-        });
-    }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -352,12 +279,23 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         @SuppressLint("SetTextI18n")
         public void updatelikescount(int c){
             likect=view.findViewById(R.id.likecount);
-            likect.setText(c+" Likes");
+            if(c==1){
+                likect.setText(c+" Like");
+            }
+            else{
+                likect.setText(c+" Likes");
+            }
         }
 
         @SuppressLint("SetTextI18n")
         public void updatecmntcount(int c){
-            cmntct.setText(c+" Comments");
+            if(c==1){
+                cmntct.setText(c+" Comment");
+            }
+            else{
+                cmntct.setText(c+" Comments");
+            }
+
         }
 
 

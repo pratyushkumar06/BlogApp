@@ -1,10 +1,9 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.media.MediaRecorder;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,16 +13,11 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageException;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
@@ -48,7 +42,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Random;
+
+import personal.project.android.blogapp.R;
 
 public class AddPost extends AppCompatActivity {
 
@@ -229,14 +224,13 @@ public class AddPost extends AppCompatActivity {
         post.put("title",t);
         post.put("description",d);
         post.put("timeStamp",FieldValue.serverTimestamp());
-        //TODO add Timestamp
 
         firebaseFirestore.collection("Posts").add(post).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
             @Override
             public void onComplete(@NonNull Task<DocumentReference> task) {
                 Toast.makeText(AddPost.this,"Post Uploaded",Toast.LENGTH_SHORT).show();
                 progressDialog.dismiss();
-                Intent in=new Intent(AddPost.this,PostActivity.class);
+                Intent in=new Intent(AddPost.this, PostActivity.class);
                 startActivity(in);
                 finish();
             }

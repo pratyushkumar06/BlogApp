@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -25,10 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
-import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Date;
@@ -37,6 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Nullable;
+
+import personal.project.android.blogapp.models.BlogPost;
+import personal.project.android.blogapp.activities.Comments;
+import personal.project.android.blogapp.R;
 
 public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecyclerAdapter.ViewHolder> {
 
@@ -71,7 +73,7 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        holder.setIsRecyclable(false);  //Smooth Loading without Recycling
+        //holder.setIsRecyclable(false);  //Smooth Loading without Recycling
         final String uid=blogPosts.get(position).getUser_id();
         if(uid!=null) {
             firebaseFirestore.collection("users").document(uid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -107,26 +109,22 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
                 @Override
                 public void onClick(View v) {
 
-                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    DocumentReference mref=firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid);
+                    mref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                         @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-
-                            if (task.getResult().isEmpty()) {
-                                Map<String, Object> likesMap = new HashMap<>();
-                                likesMap.put("uid", curruid);
-                                //likesMap.put("timestamp", FieldValue.serverTimestamp());
-                                System.out.println(BlogPostid);
-                                firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
-
-
-                            }else if (task.getResult() != null) {
-                                firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).delete();
-
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.isSuccessful()){
+                                DocumentSnapshot document = task.getResult();
+                                if (document.exists()) {
+                                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).delete();
+                                } else {
+                                    Map<String, Object> likesMap = new HashMap<>();
+                                    likesMap.put("uid", curruid);
+                                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
+                                }
                             }
                         }
-
                     });
-
                 }
             });
 
@@ -206,7 +204,7 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
         holder.cbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent in=new Intent(context,Comments.class);
+                Intent in=new Intent(context, Comments.class);
                 in.putExtra("blogPostId",BlogPostid);  //We pass the BlogPost Id too
                 context.startActivity(in);
             }
@@ -225,7 +223,6 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
         String datestr= DateFormat.format("dd/MM/yyyy",new Date(milisecs)).toString();
         holder.setTime(datestr);
 
-        //Likes Feature
 
     }
 
@@ -292,11 +289,22 @@ public class AccountRecyclerAdapter extends RecyclerView.Adapter<AccountRecycler
         @SuppressLint("SetTextI18n")
         public void updatelikescount(int c){
             likect=view.findViewById(R.id.likecount);
-            likect.setText(c+" Likes");
+            if(c==1){
+                likect.setText(c+" Like");
+            }
+            else{
+                likect.setText(c+" Likes");
+            }
+
         }
         @SuppressLint("SetTextI18n")
         public void updatecmntcount(int c){
-            cmntct.setText(c+" Comments");
+            if(c==1){
+                cmntct.setText(c+" Comment");
+            }
+            else{
+                cmntct.setText(c+" Comments");
+            }
         }
 
 

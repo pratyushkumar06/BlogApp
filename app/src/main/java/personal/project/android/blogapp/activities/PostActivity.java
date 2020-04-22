@@ -1,11 +1,10 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -18,9 +17,9 @@ import androidx.fragment.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
-import android.widget.Switch;
 import android.widget.Toast;
+
+import personal.project.android.blogapp.R;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -41,7 +40,7 @@ public class PostActivity extends AppCompatActivity {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent=new Intent(PostActivity.this,AddPost.class);
+                Intent intent=new Intent(PostActivity.this, AddPost.class);
                 startActivity(intent);
             }
         });
@@ -96,7 +95,7 @@ public class PostActivity extends AppCompatActivity {
     protected void onStart() {
         FirebaseUser user=FirebaseAuth.getInstance().getCurrentUser();
         if(user!=null && user.getDisplayName()==null && user.getPhotoUrl()==null){  //As creating a profile is an essential process it will cause to create profile
-            Intent in=new Intent(PostActivity.this,AccountSettings.class);
+            Intent in=new Intent(PostActivity.this, AccountSettings.class);
             startActivity(in);
             Toast.makeText(PostActivity.this,"Create Profile to proceed",Toast.LENGTH_LONG).show();
         }
@@ -114,7 +113,7 @@ public class PostActivity extends AppCompatActivity {
         int id=item.getItemId();
         if(id==R.id.logout){
             mAuth.signOut();
-            Intent in=new Intent(PostActivity.this,MainActivity.class);
+            Intent in=new Intent(PostActivity.this, MainActivity.class);
             startActivity(in);
             finish();
         }
@@ -135,6 +134,8 @@ public class PostActivity extends AppCompatActivity {
         }
 
         else if(fragment==accountFragment){
+            fragmentTransaction.detach(accountFragment);
+            fragmentTransaction.attach(accountFragment);
             fragmentTransaction.hide(homeFragment);
             fragmentTransaction.hide(notificationFragment);
         }

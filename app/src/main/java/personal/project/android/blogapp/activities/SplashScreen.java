@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import com.google.firebase.auth.FirebaseAuth;
+
+import personal.project.android.blogapp.R;
 
 public class SplashScreen extends AppCompatActivity {
 private FirebaseAuth auth;
@@ -27,12 +29,12 @@ private FirebaseAuth auth;
                 {
 
                     if(auth.getCurrentUser()!=null){
-                        Intent intent=new Intent(SplashScreen.this,PostActivity.class);
+                        Intent intent=new Intent(SplashScreen.this, PostActivity.class);
                         startActivity(intent);
                         finish();
                     }
                     else {
-                        Intent intent=new Intent(SplashScreen.this,MainActivity.class);
+                        Intent intent=new Intent(SplashScreen.this, MainActivity.class);
                         startActivity(intent);
                         finish();
                     }

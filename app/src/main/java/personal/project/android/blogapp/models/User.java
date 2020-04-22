@@ -1,4 +1,4 @@
-package personal.project.android.blogapp;
+package personal.project.android.blogapp.models;
 
 public class User {
     private String Url,name;

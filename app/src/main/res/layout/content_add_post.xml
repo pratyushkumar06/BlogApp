@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#fff"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".AddPost"
+    tools:context=".activities.AddPost"
     tools:showIn="@layout/activity_add_post">
 
     <ImageView
@@ -13,40 +14,66 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:layout_alignParentStart="true"
+        android:padding="5dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="2dp"
         android:layout_marginTop="16dp"
         app:srcCompat="@drawable/back" />
-
+    <View
+        android:layout_below="@id/imageView3"
+        android:background="#848484"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
     <EditText
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/imageView3"
+        android:padding="10dp"
+        android:paddingStart="15dp"
+        android:background="#fff"
         android:layout_alignParentStart="true"
         android:layout_marginStart="0dp"
         android:layout_marginTop="278dp"
         android:ems="10"
         android:hint="Title"
         android:inputType="textPersonName" />
-
+    <View
+        android:layout_below="@id/title"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="#848484"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
     <Button
         android:id="@+id/post"
         android:layout_width="340dp"
         android:layout_height="52dp"
-        android:layout_alignTop="@+id/imageView3"
+        android:layout_below="@id/desc"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="526dp"
+        android:layout_marginTop="54dp"
         android:background="@drawable/btn_background"
         android:text="Post BLog"
         android:textAlignment="center"
         android:textColor="#ffffff" />
-
+    <View
+        android:layout_below="@id/desc"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="#848484"
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
     <EditText
         android:id="@+id/desc"
         android:layout_width="match_parent"
-        android:layout_height="134dp"
+        android:layout_height="154dp"
         android:layout_alignTop="@+id/imageView3"
+        android:padding="10dp"
+        android:paddingStart="15dp"
+        android:background="#fff"
         android:layout_alignParentStart="true"
         android:layout_marginStart="-2dp"
         android:layout_marginTop="347dp"
