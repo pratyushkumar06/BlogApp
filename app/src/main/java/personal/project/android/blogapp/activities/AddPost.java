@@ -156,9 +156,6 @@ public class AddPost extends AppCompatActivity {
 
         final StorageReference ImagesRef = storageRef.child("post_images/").child(resulturi.getLastPathSegment());
 
-
-        //TODO compressed thumbnail post image for loading fast
-
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 20, baos);
         byte[] data = baos.toByteArray();

@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
@@ -53,6 +55,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
     private FirebaseFirestore firebaseFirestore;
     private Boolean button=true;
     FirebaseAuth auth;
+    private String sendId;
     //  public TextView likect;
 
 
@@ -130,15 +133,50 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                    DocumentReference mref=firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid);
                    mref.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                        @Override
-                       public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                       public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
                            if(task.isSuccessful()){
                                DocumentSnapshot document = task.getResult();
                                if (document.exists()) {
                                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).delete();
+                                   firebaseFirestore.collection("users").document(curruid).collection("Notifications").document(curruid).delete();
                                } else {
+
+                                   firebaseFirestore.collection("Posts").document(BlogPostid).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                       @Override
+                                       public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
+                                           if(task2.isSuccessful()){
+                                               if(task2.getResult()!=null){
+                                                   sendId=task2.getResult().get("user_id").toString();
+
+                                                   String message=auth.getCurrentUser().getDisplayName()+" "+"Liked your Post";
+                                                   Map<String ,Object> notifs=new HashMap<>();
+                                                   notifs.put("message",message);
+                                                   notifs.put("id",curruid);
+                                                   notifs.put("postId",BlogPostid);
+                                                   notifs.put("timestamp", FieldValue.serverTimestamp());
+                                                   DocumentReference reference = firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid);
+
+                                                   firebaseFirestore.collection("users").document(sendId).collection("Notifications").add(notifs).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                       @Override
+                                                       public void onSuccess(DocumentReference documentReference) {
+
+                                                       }
+                                                   })
+                                                           .addOnFailureListener(new OnFailureListener() {
+                                                               @Override
+                                                               public void onFailure(@NonNull Exception e) {
+                                                                   Toast.makeText(context,"Error",Toast.LENGTH_SHORT).show();
+                                                               }
+                                                           });
+                                               }
+                                           }
+                                       }
+                                   });
                                    Map<String, Object> likesMap = new HashMap<>();
                                    likesMap.put("uid", curruid);
                                    firebaseFirestore.collection("Posts/").document(BlogPostid.toString()).collection("/Likes").document(curruid).set(likesMap);
+
+
                                }
                            }
                        }

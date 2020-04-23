@@ -33,8 +33,9 @@ public class PostActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
-        Toolbar toolbar = findViewById(R.id.toolbar);
+        final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        toolbar.setTitle("Home");
 
         floatingActionButton=findViewById(R.id.floatingActionButton2);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -62,14 +63,17 @@ public class PostActivity extends AppCompatActivity {
                     switch (menuItem.getItemId()) {
                         case R.id.hm:
                             replaceFragment(homeFragment);
+                            toolbar.setTitle("Home");
                             return true;
 
                         case R.id.notf:
                             replaceFragment(notificationFragment);
+                            toolbar.setTitle("Notifications");
                             return true;
 
                         case R.id.acc:
                             replaceFragment(accountFragment);
+                            toolbar.setTitle("Account");
                             return true;
 
                         default:
@@ -134,14 +138,14 @@ public class PostActivity extends AppCompatActivity {
         }
 
         else if(fragment==accountFragment){
-            fragmentTransaction.detach(accountFragment);
-            fragmentTransaction.attach(accountFragment);
             fragmentTransaction.hide(homeFragment);
             fragmentTransaction.hide(notificationFragment);
         }
 
 
         else if(fragment==notificationFragment){
+            fragmentTransaction.detach(notificationFragment);
+            fragmentTransaction.attach(notificationFragment);
             fragmentTransaction.hide(homeFragment);
             fragmentTransaction.hide(accountFragment);
         }

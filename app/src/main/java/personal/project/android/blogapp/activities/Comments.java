@@ -4,10 +4,13 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -20,6 +23,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -46,7 +50,7 @@ public class Comments extends AppCompatActivity {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth auth;
     CommentsAdapter commentsAdapter;
-    private String curr_uid;
+    private String curr_uid,sendID;
     private List<CommentsContent> list;
     @SuppressLint("RestrictedApi")
     @Override
@@ -86,6 +90,37 @@ public class Comments extends AppCompatActivity {
                       public void onComplete(@NonNull Task<DocumentReference> task) {
                      if(task.isSuccessful()){
                          Toast.makeText(Comments.this,"Comment Posted",Toast.LENGTH_SHORT).show();
+                             firebaseFirestore.collection("Posts").document(blogPostId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                 @Override
+                                 public void onComplete(@NonNull Task<DocumentSnapshot> task2) {
+                                     if (task2.isSuccessful()) {
+                                         if (task2.getResult() != null) {
+                                             sendID = task2.getResult().get("user_id").toString();
+                                             String message=auth.getCurrentUser().getDisplayName()+" "+"Commented on your Post";
+                                             Map<String ,Object> notifs=new HashMap<>();
+                                             notifs.put("message",message);
+                                             notifs.put("id",curr_uid);
+                                             notifs.put("postId",blogPostId);
+                                             notifs.put("timestamp", FieldValue.serverTimestamp());
+                                             firebaseFirestore.collection("users").document(sendID).collection("Notifications").add(notifs).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                 @Override
+                                                 public void onSuccess(DocumentReference documentReference) {
+
+                                                 }
+                                             })
+                                                     .addOnFailureListener(new OnFailureListener() {
+                                                         @Override
+                                                         public void onFailure(@NonNull Exception e) {
+                                                             Toast.makeText(Comments.this,"Error",Toast.LENGTH_SHORT).show();
+                                                         }
+                                                     });
+                                         }
+                                     } else {
+                                         Log.i("Tag", "Error");
+                                     }
+                                 }
+                             });
+
                      }
                      else {
                          Toast.makeText(Comments.this,task.getException().getMessage().toString(),Toast.LENGTH_SHORT).show();
