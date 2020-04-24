@@ -6,7 +6,7 @@ A Simple realtime blog application using Firestore Cloud as a backend.
 - Users can Like and comment on other users post
 - Users can see what other users of the app have posted as all the posts are public by default
 - Everything is done in Realtime.
-- Notification features are still in progress.
+- Push Notifications are enabled for when the some user likes or comments on your post.
 - googleservices.json file has been removed for security purposes.<br>
             
 <img src=https://github.com/pratyushkumar06/BlogApp/blob/master/login.jpeg width="250" height="500" />     <img src=https://github.com/pratyushkumar06/BlogApp/blob/master/home.jpeg width="250" height="500" />  <img src=https://github.com/pratyushkumar06/BlogApp/blob/master/Notifications.jpeg width="250" height="500" />
