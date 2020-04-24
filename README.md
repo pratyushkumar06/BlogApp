@@ -10,4 +10,4 @@ A Simple realtime blog application using Firestore Cloud as a backend.
 - googleservices.json file has been removed for security purposes.<br>
             
 <img src=https://github.com/pratyushkumar06/BlogApp/blob/master/login.jpeg width="240" height="500" />     <img src=https://github.com/pratyushkumar06/BlogApp/blob/master/home.jpeg width="240" height="500" />  <img src=https://github.com/pratyushkumar06/BlogApp/blob/master/Notifications.jpeg width="240" height="500" />
-<img src=https://github.com/pratyushkumar06/BlogApp/blob/master/add_post.jpeg width="240" height="500" />   
+<img src=https://github.com/pratyushkumar06/BlogApp/blob/master/account.jpeg width="240" height="500" />   
