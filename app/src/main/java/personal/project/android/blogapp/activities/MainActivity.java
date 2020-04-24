@@ -11,9 +11,15 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import personal.project.android.blogapp.R;
 
@@ -21,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     private Button button,signup;
     private EditText mEmail,mPassword;
     private FirebaseAuth mAuth;
+    private FirebaseFirestore firebaseFirestore;
     String email,pass;
     private FirebaseAuth.AuthStateListener stateListener;
     ProgressBar progressBar;
@@ -34,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mEmail=findViewById(R.id.editText);
         mPassword=findViewById(R.id.editText2);
         progressBar=findViewById(R.id.progressBar);
-
+        firebaseFirestore=FirebaseFirestore.getInstance();
 
         mAuth=FirebaseAuth.getInstance();
         button.setOnClickListener(new View.OnClickListener() {
@@ -99,6 +106,17 @@ public class MainActivity extends AppCompatActivity {
                     if (!task.isSuccessful()) {
                         Toast.makeText(MainActivity.this, "Username or Password is Incorrect", Toast.LENGTH_LONG).show();
                     }
+                    String token_id= FirebaseInstanceId.getInstance().getToken();  //To get the FCM token Id
+                    String cur_id=mAuth.getCurrentUser().getUid();
+
+                    Map<String ,Object> tk=new HashMap<>();
+                    assert token_id != null;
+                    tk.put("token_id",token_id);
+                    firebaseFirestore.collection("users").document(cur_id).update(tk).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+                        }
+                    });
                     progressBar.setVisibility(View.GONE);
                 }
             });

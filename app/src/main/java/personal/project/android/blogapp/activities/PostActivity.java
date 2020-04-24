@@ -3,10 +3,12 @@ package personal.project.android.blogapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +21,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import personal.project.android.blogapp.R;
 
 public class PostActivity extends AppCompatActivity {
@@ -28,6 +33,7 @@ public class PostActivity extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private HomeFragment homeFragment;
     private AccountFragment accountFragment;
+    private FirebaseFirestore firebaseFirestore;
     private NotificationFragment notificationFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,7 @@ public class PostActivity extends AppCompatActivity {
         final Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Home");
+        firebaseFirestore=FirebaseFirestore.getInstance();
 
         floatingActionButton=findViewById(R.id.floatingActionButton2);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -116,6 +123,17 @@ public class PostActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id=item.getItemId();
         if(id==R.id.logout){
+            if(mAuth.getCurrentUser()!=null){
+                String cuid=mAuth.getCurrentUser().getUid();
+                Map<String ,Object> tokenremove=new HashMap<>();
+                tokenremove.put("token_id", "");
+                firebaseFirestore.collection("users").document(cuid).update(tokenremove).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                    }
+                });
+            }
+
             mAuth.signOut();
             Intent in=new Intent(PostActivity.this, MainActivity.class);
             startActivity(in);
@@ -138,6 +156,7 @@ public class PostActivity extends AppCompatActivity {
         }
 
         else if(fragment==accountFragment){
+            fragmentTransaction.detach(notificationFragment);
             fragmentTransaction.hide(homeFragment);
             fragmentTransaction.hide(notificationFragment);
         }
